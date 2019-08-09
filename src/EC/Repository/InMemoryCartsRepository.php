@@ -17,7 +17,7 @@ class InMemoryCartsRepository implements CartRepository
     public function getOrCreate(UuidInterface $cartId): Cart
     {
         if (!array_key_exists($cartId->toString(), $this->carts)) {
-            $cart = new Cart(Uuid::uuid4());
+            $cart = new Cart($cartId);
             $cartId = $cart->getId();
 
             $this->carts[$cartId->toString()] = $cart;
