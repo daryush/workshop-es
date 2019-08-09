@@ -24,7 +24,7 @@ class Cart
     /**
      * @var int
      */
-    private $version = 1;
+    private $version = 0;
 
     /**
      * @var Event[]
@@ -48,6 +48,7 @@ class Cart
     {
         $object = new self();
 
+        /** @var Event $event */
         foreach ($events as $event) {
             $object->apply($event);
             $object->version = $event->getVersion();
@@ -65,7 +66,7 @@ class Cart
 
     protected function recordThat(Event $event)
     {
-        $event->setVersion($this->version++);
+        $event->setVersion(++$this->version);
 
         $this->events[] = $event;
 
@@ -90,6 +91,9 @@ class Cart
                     $this->items[$event->getProductId()->toString()]->changeQuantity($currentQuantity + $event->getQuantity());
                 }
 
+                break;
+            case CartCleared::class:
+                $this->items = [];
                 break;
         }
     }
@@ -122,8 +126,7 @@ class Cart
 
     public function clear()
     {
-        $this->items = [];
-        $this->events[] = new CartCleared($this->id);
+        $this->recordThat(new CartCleared($this->id));
     }
 
     public function fetchEvents(): array

@@ -20,9 +20,10 @@ require __DIR__ . '/vendor/autoload.php';
 //$carts = new InMemoryCartsRepository();
 $adapter = new Local('var/');
 //$adapter = new \Gaufrette\Adapter\Zip('var/carts.zip');
-$carts = new FileCartRepository(new Filesystem($adapter));
+$carts = new \EC\Repository\InMemoryEventSourcedCartsRepository();
 $cartId = Uuid::uuid4();
 $laptop = new Product(Uuid::uuid4(), 'Laptop');
+$pecet = new Product(Uuid::uuid4(), 'Pecet');
 
 $bus = new MessageBus([
     new HandleMessageMiddleware(new HandlersLocator([
@@ -33,8 +34,11 @@ $bus = new MessageBus([
 
 $bus->dispatch(new AddProductToCart($cartId->toString(), $laptop->getId()->toString()));
 $bus->dispatch(new AddProductToCart($cartId->toString(), $laptop->getId()->toString()));
+$bus->dispatch(new AddProductToCart($cartId->toString(), $pecet->getId()->toString()));
 $bus->dispatch(new ClearCart($cartId->toString()));
 
 //current($cart->getItems())->changeQuantity(-10); // @todo To jest problem -> clone na zwrotce z metody
 
-dump($carts);
+$cart = $carts->getOrCreate($cartId);
+
+dump($cart);
