@@ -8,6 +8,7 @@
     "ramsey/uuid": "^3.8",
     "webmozart/assert": "^1.4",
     "symfony/var-dumper": "^4.3",
-    "symfony/messenger": "^4.3"
+    "symfony/messenger": "^4.3",
+    "knplabs/gaufrette": "^0.8.3"
   }
 }
