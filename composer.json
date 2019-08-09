@@ -1,0 +1,12 @@
+{
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "require": {
+    "ramsey/uuid": "^3.8",
+    "webmozart/assert": "^1.4",
+    "symfony/var-dumper": "^4.3"
+  }
+}
